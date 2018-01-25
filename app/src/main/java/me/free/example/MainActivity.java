@@ -10,61 +10,102 @@ import java.util.List;
 
 import me.free.sticky.StickyItemDecoration;
 
+/**
+ *  cpf
+ */
+
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-
-    List<Test> testList = new ArrayList<>();
+    /**
+     *  recyclerView
+     */
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TestAdapter testAdapter = new TestAdapter(this);
-        recyclerView = (RecyclerView) findViewById(R.id.rv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new StickyItemDecoration());
-        recyclerView.setAdapter(testAdapter);
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new StickyItemDecoration());
 
-        Test test = new Test();
-        test.content = "测试数据我测试One";
-        test.viewType = 11;
-        testList.add(test);
-
-        addTestContent();
-
-        Test testTwo = new Test();
-        testTwo.content = "测试Two";
-        testTwo.viewType = 11;
-        testList.add(testTwo);
-
-        addTestContent();
-
-        Test testThree = new Test();
-        testThree.content = "测试Three";
-        testThree.viewType = 11;
-        testList.add(testThree);
-
-        addTestContent();
-
-        Test testFour = new Test();
-        testFour.content = "测试Four";
-        testFour.viewType = 11;
-        testList.add(testFour);
-
-        addTestContent();
-
-        testAdapter.testList = testList;
-        testAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(new PerformerListAdapter(this, getData()));
     }
 
-    private void addTestContent() {
-        for (int i = 0; i < 10; i++) {
-            Test test = new Test();
-            test.content = "测试内容："+i;
-            test.viewType = 10;
-            testList.add(test);
-        }
+    private List<Performer> getData() {
+        List<Performer> performers = new ArrayList<>();
+
+        Performer performer = new Performer("香港明星");
+        performers.add(performer);
+
+        Performer ldh = new Performer("刘德华", 10);
+        performers.add(ldh);
+        Performer zxy = new Performer("张学友", 10);
+        performers.add(zxy);
+        Performer zrf = new Performer("周润发", 10);
+        performers.add(zrf);
+        Performer lcw = new Performer("梁朝伟", 10);
+        performers.add(lcw);
+        Performer wyj = new Performer("吴毅将", 10);
+        performers.add(wyj);
+        Performer lm = new Performer("黎明", 10);
+        performers.add(lm);
+        Performer cgx = new Performer("陈冠希", 10);
+        performers.add(cgx);
+        Performer gfc = new Performer("郭富城", 10);
+        performers.add(gfc);
+        Performer xtf = new Performer("谢霆锋", 10);
+        performers.add(xtf);
+
+        Performer performerTw = new Performer("台湾明星");
+        performers.add(performerTw);
+
+        Performer rxq = new Performer("任贤齐", 10);
+        performers.add(rxq);
+        Performer mtw = new Performer("孟庭苇", 10);
+        performers.add(mtw);
+        Performer ldy = new Performer("罗大佑", 10);
+        performers.add(ldy);
+        Performer lzs = new Performer("李宗盛", 10);
+        performers.add(lzs);
+        Performer xc = new Performer("小虫", 10);
+        performers.add(xc);
+        Performer zhj = new Performer("周华健", 10);
+        performers.add(zhj);
+        Performer zhl = new Performer("周杰伦", 10);
+        performers.add(zhl);
+
+        Performer performerNl = new Performer("内陆明星");
+        performers.add(performerNl);
+
+        Performer lh = new Performer("鹿晗", 10);
+        performers.add(lh);
+        Performer wzw = new Performer("王志文", 10);
+        performers.add(wzw);
+        Performer yq = new Performer("羽泉", 10);
+        performers.add(yq);
+        Performer lxl = new Performer("李小璐", 10);
+        performers.add(lxl);
+        Performer hh = new Performer("韩红", 10);
+        performers.add(hh);
+        Performer ny = new Performer("那英", 10);
+        performers.add(ny);
+        Performer lhh = new Performer("刘欢", 10);
+        performers.add(lhh);
+        Performer yk = new Performer("杨坤", 10);
+        performers.add(yk);
+        Performer zj = new Performer("周杰", 10);
+        performers.add(zj);
+
+        Performer performerOm = new Performer("欧美明星");
+        performers.add(performerOm);
+        Performer mm = new Performer("梅梅", 10);
+        performers.add(mm);
+        Performer ade = new Performer("阿黛尔", 10);
+        performers.add(ade);
+
+        return performers;
     }
+
 }
