@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         Performer xtf = new Performer("谢霆锋", 10);
         performers.add(xtf);
 
-        Performer performerTw = new Performer("台湾明星");
+        Performer performerTw = new Performer("台湾明星：指的是中国台湾的一些有名气的电影，电视演员和歌手，他们具有很高的人气，成名时间早，成名时间久");
         performers.add(performerTw);
 
         Performer rxq = new Performer("任贤齐", 10);
@@ -98,12 +98,52 @@ public class MainActivity extends AppCompatActivity {
         Performer zj = new Performer("周杰", 10);
         performers.add(zj);
 
-        Performer performerOm = new Performer("欧美明星");
+        Performer performerOm = new Performer("美国明星");
         performers.add(performerOm);
         Performer mm = new Performer("梅梅", 10);
         performers.add(mm);
-        Performer ade = new Performer("阿黛尔", 10);
+        Performer ade = new Performer("Gaga", 10);
         performers.add(ade);
+        Performer hff = new Performer("黑寡妇", 10);
+        performers.add(hff);
+        Performer xlz = new Performer("小李子", 10);
+        performers.add(xlz);
+
+        Performer performerNba = new Performer("NBA明星");
+        performers.add(performerNba);
+        Performer xhd = new Performer("小皇帝", 10);
+        performers.add(xhd);
+        Performer kb = new Performer("科比", 10);
+        performers.add(kb);
+        Performer ym = new Performer("姚明", 10);
+        performers.add(ym);
+        Performer md = new Performer("麦迪", 10);
+        performers.add(md);
+        Performer dlt = new Performer("杜兰特", 10);
+        performers.add(dlt);
+        Performer kl = new Performer("库里", 10);
+        performers.add(kl);
+        Performer ouw = new Performer("欧文", 10);
+        performers.add(ouw);
+        Performer qd = new Performer("乔丹", 10);
+        performers.add(qd);
+        Performer alzw = new Performer("奥拉朱旺", 10);
+        performers.add(alzw);
+        Performer pp = new Performer("皮蓬", 10);
+        performers.add(pp);
+
+        Performer performerDy = new Performer("导演");
+        performers.add(performerDy);
+        Performer jzk = new Performer("贾樟柯", 10);
+        performers.add(jzk);
+        Performer ly = new Performer("李杨", 10);
+        performers.add(ly);
+        Performer fxg = new Performer("冯小刚", 10);
+        performers.add(fxg);
+        Performer lyy = new Performer("娄烨", 10);
+        performers.add(lyy);
+        Performer zym = new Performer("张艺谋", 10);
+        performers.add(zym);
 
         return performers;
     }
