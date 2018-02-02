@@ -131,6 +131,20 @@ public class MainActivity extends AppCompatActivity {
         performers.add(alzw);
         Performer pp = new Performer("皮蓬", 10);
         performers.add(pp);
+        Performer ldm = new Performer("罗德曼", 10);
+        performers.add(ldm);
+        Performer ke = new Performer("科尔", 10);
+        performers.add(ke);
+        Performer pesi = new Performer("皮尔斯", 10);
+        performers.add(pesi);
+        Performer jnt = new Performer("加内特", 10);
+        performers.add(jnt);
+        Performer lal = new Performer("雷阿伦", 10);
+        performers.add(lal);
+        Performer zmg = new Performer("字母哥", 10);
+        performers.add(zmg);
+        Performer adn = new Performer("安东尼", 10);
+        performers.add(adn);
 
         Performer performerDy = new Performer("导演");
         performers.add(performerDy);
