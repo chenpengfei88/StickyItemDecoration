@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         Performer zym = new Performer("张艺谋", 10);
         performers.add(zym);
 
-        return new ArrayList<>();
+        return performers;
     }
 
 }
