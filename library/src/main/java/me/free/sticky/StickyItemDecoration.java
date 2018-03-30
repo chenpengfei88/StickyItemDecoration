@@ -88,6 +88,8 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
 
+        if (parent.getAdapter().getItemCount() <= 0) return;
+
         mLayoutManager = (LinearLayoutManager) parent.getLayoutManager();
         mCurrentUIFindStickView = false;
 
@@ -129,7 +131,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
         if (!mCurrentUIFindStickView) {
             mStickyItemViewMarginTop = 0;
-            if (mLayoutManager.findFirstVisibleItemPosition() + parent.getChildCount() == parent.getAdapter().getItemCount()) {
+            if (mLayoutManager.findFirstVisibleItemPosition() + parent.getChildCount() == parent.getAdapter().getItemCount() && mStickyPositionList.size() > 0) {
                 bindDataForStickyView(mStickyPositionList.get(mStickyPositionList.size() - 1), parent.getMeasuredWidth());
             }
             drawStickyItemView(c);
@@ -141,7 +143,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
      * @param position
      */
     private void bindDataForStickyView(int position, int width) {
-        if (mBindDataPosition == position) return;
+        if (mBindDataPosition == position || mViewHolder == null) return;
 
         mBindDataPosition = position;
         mAdapter.onBindViewHolder(mViewHolder, mBindDataPosition);
@@ -175,6 +177,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
      */
     private void getStickyViewHolder(RecyclerView recyclerView) {
         if (mAdapter != null) return;
+
         mAdapter = recyclerView.getAdapter();
         mViewHolder = mAdapter.onCreateViewHolder(recyclerView, mStickyView.getStickViewType());
         mStickyItemView = mViewHolder.itemView;
@@ -185,7 +188,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
      * @param parentWidth
      */
     private void measureLayoutStickyItemView(int parentWidth) {
-        if (!mStickyItemView.isLayoutRequested()) return;
+        if (mStickyItemView == null || !mStickyItemView.isLayoutRequested()) return;
 
         int widthSpec = View.MeasureSpec.makeMeasureSpec(parentWidth, View.MeasureSpec.EXACTLY);
         int heightSpec;
@@ -206,6 +209,8 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
      * @param canvas
      */
     private void drawStickyItemView(Canvas canvas) {
+        if (mStickyItemView == null) return;
+
         int saveCount = canvas.save();
         canvas.translate(0, -mStickyItemViewMarginTop);
         mStickyItemView.draw(canvas);
