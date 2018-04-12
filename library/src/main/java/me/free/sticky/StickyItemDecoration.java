@@ -84,6 +84,8 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
         mPaint.setAntiAlias(true);
     }
 
+
+
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
@@ -122,6 +124,11 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
                     mStickyItemViewMarginTop = mStickyItemViewHeight - view.getTop();
                 } else {
                     mStickyItemViewMarginTop = 0;
+
+                    View nextStickyView = getNextStickyView(parent);
+                    if (nextStickyView != null && nextStickyView.getTop() <= mStickyItemViewHeight) {
+                        mStickyItemViewMarginTop = mStickyItemViewHeight - nextStickyView.getTop();
+                    }
                 }
 
                 drawStickyItemView(c);
@@ -136,6 +143,25 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
             }
             drawStickyItemView(c);
         }
+    }
+
+    /**
+     * 得到下一个吸附View
+     * @param parent
+     * @return
+     */
+    private View getNextStickyView(RecyclerView parent) {
+        int num = 0;
+        View nextStickyView = null;
+        for (int m = 0, size = parent.getChildCount(); m < size; m++) {
+            View view = parent.getChildAt(m);
+            if (mStickyView.isStickyView(view)) {
+                nextStickyView = view;
+                num++;
+            }
+            if (num == 2) break;
+        }
+        return nextStickyView;
     }
 
     /**
