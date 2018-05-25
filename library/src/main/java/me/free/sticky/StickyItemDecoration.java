@@ -129,6 +129,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
                     if (nextStickyView != null && nextStickyView.getTop() <= mStickyItemViewHeight) {
                         mStickyItemViewMarginTop = mStickyItemViewHeight - nextStickyView.getTop();
                     }
+
                 }
 
                 drawStickyItemView(c);
@@ -161,7 +162,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
             }
             if (num == 2) break;
         }
-        return nextStickyView;
+        return num >= 2 ? nextStickyView : null;
     }
 
     /**

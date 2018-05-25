@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new StickyItemDecoration());
-
+        mRecyclerView.addItemDecoration(new ListDividerItemDecoration());
         mRecyclerView.setAdapter(new PerformerListAdapter(this, getData()));
     }
 
