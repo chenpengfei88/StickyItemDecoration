@@ -160,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
 //        performers.add(zym);
 
 
-//        Performer performer = new Performer("香港明星");
-//        performers.add(performer);
+        Performer performer = new Performer("香港明星");
+        performers.add(performer);
 
         Performer ldh = new Performer("刘德华", 10);
         performers.add(ldh);
