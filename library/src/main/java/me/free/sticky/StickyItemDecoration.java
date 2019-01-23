@@ -115,7 +115,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
                         } else {
                             int currentPosition = getStickyViewPositionOfRecyclerView(m);
                             int indexOfCurrentPosition = mStickyPositionList.lastIndexOf(currentPosition);
-                            bindDataForStickyView(mStickyPositionList.get(indexOfCurrentPosition - 1), parent.getMeasuredWidth());
+                            if (indexOfCurrentPosition >= 1) bindDataForStickyView(mStickyPositionList.get(indexOfCurrentPosition - 1), parent.getMeasuredWidth());
                         }
                     }
                 }

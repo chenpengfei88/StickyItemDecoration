@@ -160,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
 //        performers.add(zym);
 
 
-        Performer performer = new Performer("香港明星");
-        performers.add(performer);
+//        Performer performer = new Performer("香港明星");
+//        performers.add(performer);
 
         Performer ldh = new Performer("刘德华", 10);
         performers.add(ldh);
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         Performer mtw = new Performer("孟庭苇", 10);
         performers.add(mtw);
 
-        Performer performerTw2 = new Performer("台湾明星：指的是中国台湾的一些有名气的电影，电视演员和歌手，他们具有很高的人气，成名时间早，成名时间久");
+        Performer performerTw2 = new Performer("台湾新生代明星：指的是中国台湾的一些有名气的电影，电视演员和歌手，他们具有很高的人气，成名时间早，成名时间久");
         performers.add(performerTw2);
 
         Performer rxq2 = new Performer("罗志祥", 10);
