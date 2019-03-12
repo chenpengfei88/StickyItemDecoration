@@ -285,7 +285,54 @@ public class MainActivity extends AppCompatActivity {
         Performer zym = new Performer("张艺谋", 10);
         performers.add(zym);
 
+
         return performers;
+    }
+
+      public static void main(String[] str) {
+
+          ThreadA t1 = new ThreadA("t1");
+          t1.zhi = 1000;
+          ThreadA t2 = new ThreadA("t2");
+          t2.zhi = 5;
+          t1.setDaemon(true);
+
+          t1.start();
+          t2.start();
+      }
+
+    static class ThreadA extends Thread{
+
+        public int zhi;
+        public ThreadA(String name){
+            super(name);
+        }
+        public void run(){
+                if (zhi == 1000){
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                    for(int i = 0; i < zhi; i++) {
+                System.out.printf("%s [%d]:%d\n", this.getName() + "==========", this.getPriority(), i);
+                System.out.println("=====" + isDaemon());
+            }
+//            synchronized (objectName) {
+//                for(int i=0; i <10; i++){
+//                    System.out.printf("%s [%d]:%d\n", this.getName() + "==========", this.getPriority(), i);
+//
+//                    if (i%4 == 0) {
+//                        try {
+//                            Thread.sleep(1000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+        }
     }
 
 }
