@@ -33,7 +33,7 @@ public class PerformerListAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        if (viewType == 10) {
+        if (viewType == Performer.TYPE_CONTENT) {
             return new ContentVH(LayoutInflater.from(mContext).inflate(R.layout.adapter_content, parent, false));
         }
 

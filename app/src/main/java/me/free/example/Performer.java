@@ -5,6 +5,8 @@ package me.free.example;
  */
 
 public class Performer {
+    public static final int TYPE_TITLE = 11;
+    public static final int TYPE_CONTENT = 10;
 
     /**
      * 名字
@@ -22,7 +24,7 @@ public class Performer {
     }
 
     public Performer(String name) {
-      this(name, 11);
+      this(name, TYPE_TITLE);
     }
 
     public String getName() {

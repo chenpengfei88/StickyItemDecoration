@@ -1,14 +1,12 @@
 package me.free.sticky;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Created by cpf on 2018/1/16.
@@ -32,14 +30,9 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     private int mStickyItemViewHeight;
 
     /**
-     *  通过它获取到需要吸附view的相关信息
+     * 通过它获取到需要吸附view的相关信息
      */
     private StickyView mStickyView;
-
-    /**
-     * 滚动过程中当前的UI是否可以找到吸附的view
-     */
-    private boolean mCurrentUIFindStickView;
 
     /**
      * adapter
@@ -52,9 +45,10 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     private RecyclerView.ViewHolder mViewHolder;
 
     /**
-     * position list
+     * 存放所有黏性标题坐标的集合
+     * 从小到大有序不重复排列
      */
-    private List<Integer> mStickyPositionList = new ArrayList<>();
+    private TreeSet<Integer> mStickyPositionSet = new TreeSet<>();
 
     /**
      * layout manager
@@ -66,58 +60,37 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
      */
     private int mBindDataPosition = -1;
 
-    /**
-     * paint
-     */
-    private Paint mPaint;
 
-    public StickyItemDecoration() {
-        mStickyView = new ExampleStickyView();
-        initPaint();
+    public StickyItemDecoration(StickyView stickyView) {
+        mStickyView = stickyView;
     }
-
-    /**
-     * init paint
-     */
-    private void initPaint() {
-        mPaint = new Paint();
-        mPaint.setAntiAlias(true);
-    }
-
-
 
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
-
+        getStickyViewHolder(parent);
         if (parent.getAdapter().getItemCount() <= 0) return;
 
         mLayoutManager = (LinearLayoutManager) parent.getLayoutManager();
-        mCurrentUIFindStickView = false;
+        /**
+         * 滚动过程中当前的UI是否可以找到吸附的view
+         */
+        boolean mCurrentUIFindStickView = false;
 
         for (int m = 0, size = parent.getChildCount(); m < size; m++) {
-            View view = parent.getChildAt(m);
-
-            /**
-             * 如果是吸附的view
-             */
-            if (mStickyView.isStickyView(view)) {
+            //当前item的实际坐标
+            int currentPosition = getStickyViewPositionOfRecyclerView(m);
+            //如果是吸附的view
+            if (mStickyPositionSet.contains(currentPosition)) {
+                View view = parent.getChildAt(m);
                 mCurrentUIFindStickView = true;
-                getStickyViewHolder(parent);
-                cacheStickyViewPosition(m);
 
                 if (view.getTop() <= 0) {
-                    bindDataForStickyView(mLayoutManager.findFirstVisibleItemPosition(), parent.getMeasuredWidth());
+                    //当前标题没有完全显示，mStickyItemView和可见的第一个标题显示相同
+                    bindDataForStickyView(currentPosition, parent.getMeasuredWidth());
                 } else {
-                    if (mStickyPositionList.size() > 0) {
-                        if (mStickyPositionList.size() == 1) {
-                            bindDataForStickyView(mStickyPositionList.get(0), parent.getMeasuredWidth());
-                        } else {
-                            int currentPosition = getStickyViewPositionOfRecyclerView(m);
-                            int indexOfCurrentPosition = mStickyPositionList.lastIndexOf(currentPosition);
-                            if (indexOfCurrentPosition >= 1) bindDataForStickyView(mStickyPositionList.get(indexOfCurrentPosition - 1), parent.getMeasuredWidth());
-                        }
-                    }
+                    //当前标题完全显示，和上一个标题显示相同
+                    bindDataForStickyView(getLastStickyPosition(currentPosition), parent.getMeasuredWidth());
                 }
 
                 if (view.getTop() > 0 && view.getTop() <= mStickyItemViewHeight) {
@@ -139,34 +112,46 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
         if (!mCurrentUIFindStickView) {
             mStickyItemViewMarginTop = 0;
-            if (mLayoutManager.findFirstVisibleItemPosition() + parent.getChildCount() == parent.getAdapter().getItemCount() && mStickyPositionList.size() > 0) {
-                bindDataForStickyView(mStickyPositionList.get(mStickyPositionList.size() - 1), parent.getMeasuredWidth());
+            if (mLayoutManager.findFirstVisibleItemPosition() + parent.getChildCount() == parent.getAdapter().getItemCount() && mStickyPositionSet.size() > 0) {
+                bindDataForStickyView(mStickyPositionSet.last(), parent.getMeasuredWidth());
             }
             drawStickyItemView(c);
         }
     }
 
     /**
+     * 获取上一个黏性item的位置
+     */
+    private int getLastStickyPosition(int position) {
+        //lower()方法返回此 set 中严格小于给定元素的最大元素；如果不存在这样的元素，则返回 null。
+        Integer lastStickyPosition = mStickyPositionSet.lower(position);
+        if (lastStickyPosition == null) {
+            lastStickyPosition = mStickyPositionSet.first();
+        }
+        return lastStickyPosition;
+    }
+
+    /**
      * 得到下一个吸附View
+     *
      * @param parent
      * @return
      */
     private View getNextStickyView(RecyclerView parent) {
         int num = 0;
-        View nextStickyView = null;
+        int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
         for (int m = 0, size = parent.getChildCount(); m < size; m++) {
-            View view = parent.getChildAt(m);
-            if (mStickyView.isStickyView(view)) {
-                nextStickyView = view;
+            if (mAdapter.getItemViewType(firstVisibleItemPosition + m) == mStickyView.getStickViewType()) {
                 num++;
+                if (num == 2) return parent.getChildAt(m);
             }
-            if (num == 2) break;
         }
-        return num >= 2 ? nextStickyView : null;
+        return null;
     }
 
     /**
      * 给StickyView绑定数据
+     *
      * @param position
      */
     private void bindDataForStickyView(int position, int width) {
@@ -180,17 +165,18 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 缓存吸附的view position
-     * @param m
      */
-    private void cacheStickyViewPosition(int m) {
-        int position = getStickyViewPositionOfRecyclerView(m);
-        if (!mStickyPositionList.contains(position)) {
-            mStickyPositionList.add(position);
+    private void cacheStickViewPosition() {
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            if (mAdapter.getItemViewType(i) == mStickyView.getStickViewType()) {
+                mStickyPositionSet.add(i);
+            }
         }
     }
 
     /**
      * 得到吸附view在RecyclerView中 的position
+     *
      * @param m
      * @return
      */
@@ -200,18 +186,57 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 得到吸附viewHolder
+     *
      * @param recyclerView
      */
     private void getStickyViewHolder(RecyclerView recyclerView) {
         if (mAdapter != null) return;
 
         mAdapter = recyclerView.getAdapter();
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                reset();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                reset();
+            }
+
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+                reset();
+            }
+
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                reset();
+            }
+
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                reset();
+            }
+
+            @Override
+            public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+                reset();
+            }
+        });
         mViewHolder = mAdapter.onCreateViewHolder(recyclerView, mStickyView.getStickViewType());
         mStickyItemView = mViewHolder.itemView;
     }
 
+    private void reset() {
+        mBindDataPosition = -1;
+        mStickyPositionSet.clear();
+        cacheStickViewPosition();
+    }
+
     /**
      * 计算布局吸附的itemView
+     *
      * @param parentWidth
      */
     private void measureLayoutStickyItemView(int parentWidth) {
@@ -233,6 +258,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
     /**
      * 绘制吸附的itemView
+     *
      * @param canvas
      */
     private void drawStickyItemView(Canvas canvas) {
