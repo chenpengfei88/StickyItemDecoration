@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.free.sticky.StickyItemDecoration;
-import me.free.sticky.StickyView;
 
 /**
  * cpf
@@ -29,12 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new StickyItemDecoration(new StickyView() {
-            @Override
-            public int getStickViewType() {
-                return Performer.TYPE_TITLE;
-            }
-        }));
+        mRecyclerView.addItemDecoration(new StickyItemDecoration(Performer.TYPE_TITLE));
         mRecyclerView.addItemDecoration(new ListDividerItemDecoration());
         mRecyclerView.setAdapter(new PerformerListAdapter(this, getData()));
     }

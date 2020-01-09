@@ -30,9 +30,9 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     private int mStickyItemViewHeight;
 
     /**
-     * 通过它获取到需要吸附view的相关信息
+     * 需要吸附view的类型
      */
-    private StickyView mStickyView;
+    private int mItemViewType;
 
     /**
      * adapter
@@ -61,8 +61,8 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
     private int mBindDataPosition = -1;
 
 
-    public StickyItemDecoration(StickyView stickyView) {
-        mStickyView = stickyView;
+    public StickyItemDecoration(int itemViewType) {
+        mItemViewType = itemViewType;
     }
 
     @Override
@@ -70,13 +70,9 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
         super.onDrawOver(c, parent, state);
         getStickyViewHolder(parent);
         if (parent.getAdapter().getItemCount() <= 0) return;
-
         mLayoutManager = (LinearLayoutManager) parent.getLayoutManager();
-        /**
-         * 滚动过程中当前的UI是否可以找到吸附的view
-         */
+        //滚动过程中当前的UI是否可以找到吸附的view
         boolean mCurrentUIFindStickView = false;
-
         for (int m = 0, size = parent.getChildCount(); m < size; m++) {
             //当前item的实际坐标
             int currentPosition = getStickyViewPositionOfRecyclerView(m);
@@ -141,7 +137,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
         int num = 0;
         int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
         for (int m = 0, size = parent.getChildCount(); m < size; m++) {
-            if (mAdapter.getItemViewType(firstVisibleItemPosition + m) == mStickyView.getStickViewType()) {
+            if (mAdapter.getItemViewType(firstVisibleItemPosition + m) == mItemViewType) {
                 num++;
                 if (num == 2) return parent.getChildAt(m);
             }
@@ -168,7 +164,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
      */
     private void cacheStickViewPosition() {
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            if (mAdapter.getItemViewType(i) == mStickyView.getStickViewType()) {
+            if (mAdapter.getItemViewType(i) == mItemViewType) {
                 mStickyPositionSet.add(i);
             }
         }
@@ -224,7 +220,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
                 reset();
             }
         });
-        mViewHolder = mAdapter.onCreateViewHolder(recyclerView, mStickyView.getStickViewType());
+        mViewHolder = mAdapter.onCreateViewHolder(recyclerView, mItemViewType);
         mStickyItemView = mViewHolder.itemView;
     }
 
