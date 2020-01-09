@@ -220,6 +220,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
                 reset();
             }
         });
+        reset();
         mViewHolder = mAdapter.onCreateViewHolder(recyclerView, mItemViewType);
         mStickyItemView = mViewHolder.itemView;
     }
