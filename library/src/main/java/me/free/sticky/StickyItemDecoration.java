@@ -94,6 +94,7 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
 
         mLayoutManager = (LinearLayoutManager) parent.getLayoutManager();
         mCurrentUIFindStickView = false;
+        clearStickyPositionList();
 
         for (int m = 0, size = parent.getChildCount(); m < size; m++) {
             View view = parent.getChildAt(m);
@@ -143,6 +144,15 @@ public class StickyItemDecoration extends RecyclerView.ItemDecoration {
                 bindDataForStickyView(mStickyPositionList.get(mStickyPositionList.size() - 1), parent.getMeasuredWidth());
             }
             drawStickyItemView(c);
+        }
+    }
+
+    /**
+     * 清空吸附position集合
+     */
+    private void clearStickyPositionList() {
+        if (mLayoutManager.findFirstVisibleItemPosition() == 0) {
+             mStickyPositionList.clear();
         }
     }
 
